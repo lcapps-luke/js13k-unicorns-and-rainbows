@@ -1,10 +1,11 @@
 package;
 
 import js.Browser;
-import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
+import js.html.CanvasRenderingContext2D;
+import menu.MenuScreen;
 
-
+@:native("M")
 class Main{
 	@:native("ca")
 	public static var canvas(default, null):CanvasElement;
@@ -13,7 +14,10 @@ class Main{
 	public static var context(default, null):CanvasRenderingContext2D;
 
 	@:native("l")
-	public static var lastFrame:Float = 0;
+	private static var lastFrame:Float = 0;
+
+	@:native("sc")
+	public static var screen:IScreen;
 
 	public static function main(){
 		canvas = cast Browser.document.getElementById("c");
@@ -22,20 +26,29 @@ class Main{
 		Browser.window.onresize = onResize;
 		onResize();
 
-		// set initial screen
+		Ctrl.init(Browser.window, canvas);
+
+		screen = new MenuScreen();
 
 		Browser.window.requestAnimationFrame(update);
 	}
 
+	@:native("u")
 	private static function update(s:Float){
-		var d = s - lastFrame;
+		var d = (s - lastFrame) / 1000;
 
-		// update screen
+		context.fillStyle = "#004";
+		context.fillRect(0, 0, canvas.width, canvas.height);
+
+		Ctrl.update();
+
+		screen?.update(d);
 
 		lastFrame = s;
 		Browser.window.requestAnimationFrame(update);
 	}
 
+	@:native("r")
 	private static function onResize(){
 		var w = Browser.window.innerWidth;
 		var h = Browser.window.innerHeight;
