@@ -23,8 +23,8 @@ class Ctrl {
 
 	@:native("fi")
 	public static var fire(default, null):Bool = false;
-	@:native("pr")
-	public static var precision(default, null):Bool = false;
+	@:native("fo")
+	public static var focus(default, null):Bool = false;
 	@:native("ra")
 	public static var rainbow(default, null):Bool = false;
 
@@ -119,12 +119,11 @@ class Ctrl {
 	public static function update() {
 		left = checkKeys(["ArrowLeft", "KeyA"]) || checkButtons([14], [0, 2], f -> f < -0.3);
 		right = checkKeys(["ArrowRight", "KeyD"]) || checkButtons([15], [0, 2], f -> f > 0.3);
-
 		up = checkKeys(["ArrowUp", "KeyW"]) || checkButtons([12], [1, 3], f -> f < -0.3);
-
 		down = checkKeys(["ArrowDown", "KeyS"]) || checkButtons([13], [1, 3], f -> f > 0.3);
 		
-		fire = checkKeys(["Space", "Enter", "KeyE"]) || checkButtons([0, 1, 2, 3], []);
+		focus = checkKeys(["ShiftLeft", "Semicolon"]) || checkButtons([4, 2, 1], []);
+		fire = checkKeys(["Space", "KeyK", "KeyZ"]) || checkButtons([5, 0], []);
 	}
 
 	@:native("ck")

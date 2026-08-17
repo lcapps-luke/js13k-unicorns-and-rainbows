@@ -13,6 +13,13 @@ class AABB{
 		this.h = h;
 	}
 
+	public function set(x:Float = 0, y:Float = 0, w:Float = 0, h:Float = 0) {
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+	}
+
 	public function overlaps(o:AABB):Bool{
 		return !(
 			x + w < o.x ||
