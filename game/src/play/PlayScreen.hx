@@ -1,5 +1,6 @@
 package play;
 
+import menu.MenuScreen;
 import play.enemy.ActionCloud;
 import play.enemy.DisplayCloud;
 import play.enemy.Enemy;
@@ -13,6 +14,9 @@ class PlayScreen implements IScreen{
 
 	private var dispCloud = new DisplayCloud();
 	private var actCloud = new ActionCloud();
+
+	public var gameover:Bool = false;
+	private var gameoverTimer:Float = 3;
 	
 	public function new(){
 		player = new Player(this);
@@ -21,7 +25,9 @@ class PlayScreen implements IScreen{
 	}
 	
 	public function update(s:Float) {
-		player.update(s);
+		if(player.alive){
+			player.update(s);
+		}
 		playerBullets.update(s);
 		enemies.update(s);
 
@@ -30,6 +36,14 @@ class PlayScreen implements IScreen{
 			spawnTimer = 3;
 
 			spawnEnemy();
+		}
+
+
+		if(gameover){
+			gameoverTimer -= s;
+			if(gameoverTimer < 0){
+				Main.screen = new MenuScreen();
+			}
 		}
 	}
 

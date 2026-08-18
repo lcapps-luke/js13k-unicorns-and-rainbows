@@ -9,6 +9,7 @@ class Player extends AbstractObject{
 	private var cd:Vec2;
 
 	private var shootCooldown:Float = 0;
+	public var health(default, set):Int = 1;
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -70,5 +71,23 @@ class Player extends AbstractObject{
 		Main.context.fillRect(bound.x, bound.y, bound.w, bound.h);
 		Main.context.fillStyle = "#000";
 		Main.context.fillRect(hit.x, hit.y, hit.w, hit.h);
+
+		screen.enemies.each(e -> {
+			if(e.attack > 0 && e.hit.overlaps(hit)){
+				hurt();
+			}
+		});
+	}
+
+	function set_health(value:Int):Int {
+		alive = value > 0;
+		return health = value;
+	}
+
+	private function hurt(){
+		health--;
+		if(health < 1){
+			screen.gameover = true;
+		}
 	}
 }
