@@ -1,7 +1,6 @@
 package resources;
 
 #if macro
-import haxe.Json;
 import haxe.macro.Context;
 import sys.FileSystem;
 import sys.io.File;
@@ -23,12 +22,7 @@ class ResourceBuilder {
 				      "-f",              IMG_PATH,
 				      "-o",          IMG_MIN_PATH,
 				      "-p",                   "1",
-				"--enable",         "removeTitle",
-				"--enable",          "removeDesc",
-				"--enable",   "removeUselessDefs",
-				"--enable", "removeEditorsNSData",
-				"--enable",       "removeViewBox",
-				"--enable", "transformsWithOnePath"
+					  "--config",	"tools/svgo-conf.js"
 			]);
 
 			minifiedImages = true;

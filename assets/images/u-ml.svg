@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="75.901894"
+   height="27.423103"
+   viewBox="0 0 75.901894 27.423103"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   sodipodi:docname="uni.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#000147"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="2.0560856"
+     inkscape:cx="59.822413"
+     inkscape:cy="121.59027"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     inkscape:window-x="-6"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer3">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="75.901894"
+       height="27.423103"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch12"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#f9f9f9;stop-opacity:1;"
+         offset="0"
+         id="stop12" />
+    </linearGradient>
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="mouth_down"
+     transform="matrix(1.8845907,0,0,1.9358156,-257.25354,-166.85469)"
+     style="display:inline">
+    <path
+       style="fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 149.31285,86.207501 24.9868,5.106792 c 12.0105,6.01634 -22.8959,10.758177 -34.71402,8.450524 -7.9581,-2.667476 1.01451,-14.024766 9.72722,-13.557316 z"
+       id="path10"
+       sodipodi:nodetypes="cccc"
+       inkscape:transform-center-x="-17.022638"
+       inkscape:transform-center-y="0.24318055" />
+  </g>
+</svg>

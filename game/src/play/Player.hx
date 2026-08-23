@@ -1,6 +1,8 @@
 package play;
 
+import js.html.ImageElement;
 import math.Vec2;
+import resources.Resources;
 
 class Player extends AbstractObject{
 	private static inline var SPEED:Float = 1500;
@@ -10,6 +12,12 @@ class Player extends AbstractObject{
 
 	private var shootCooldown:Float = 0;
 	public var health(default, set):Int = 1;
+
+	private var spBody:ImageElement;
+	private var spMouthL:ImageElement;
+	private var spMouthU:ImageElement;
+	private var spLeg:Sprite;
+	private var legTimer:Float = 0;
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -21,6 +29,11 @@ class Player extends AbstractObject{
 		boundOffset.set(-64, -64);
 
 		cd = new Vec2();
+
+		spBody = Resources.images.get(Resources.UNI_BODY);
+		spMouthL = Resources.images.get(Resources.UNI_MOUTH_LOW);
+		spMouthU = Resources.images.get(Resources.UNI_MOUTH_UP);
+		spLeg = new Sprite(Resources.images.get(Resources.UNI_LEG), 5, 5);
 	}
 
 	override public function update(s:Float) {
@@ -67,16 +80,37 @@ class Player extends AbstractObject{
 		updateBox(hit, hitOffset);
 		updateBox(bound, boundOffset);
 
-		Main.context.fillStyle = "#FFF";
+		Main.context.fillStyle = "#555";
 		Main.context.fillRect(bound.x, bound.y, bound.w, bound.h);
-		Main.context.fillStyle = "#000";
-		Main.context.fillRect(hit.x, hit.y, hit.w, hit.h);
+		//Main.context.fillStyle = "#000";
+		//Main.context.fillRect(hit.x, hit.y, hit.w, hit.h);
 
+		legTimer += Math.PI * s;
+		// behind
+		Main.context.filter = "brightness(90%)"; 
+		spLeg.draw(Main.context, pos.x-115+105, pos.y-110+200, getLegAngle(-Math.PI * .1, Math.PI * .1, 1));
+		spLeg.draw(Main.context, pos.x-115+15, pos.y-110+200, getLegAngle(Math.PI * .3, Math.PI * .4, 1));
+		Main.context.filter = "brightness(100%)"; 
+
+		// main
+		Main.context.drawImage(spBody, pos.x-115, pos.y-110);
+		Main.context.drawImage(spMouthU, pos.x-115+139, pos.y-110+99);
+		Main.context.drawImage(spMouthL, pos.x-115+119, pos.y-110+126);
+
+		// front
+		spLeg.draw(Main.context, pos.x-115+105, pos.y-110+200, getLegAngle(-Math.PI * .1, Math.PI * .1, 0));
+		spLeg.draw(Main.context, pos.x-115+15, pos.y-110+200, getLegAngle(Math.PI * .3, Math.PI * .4, 0));
+		
 		screen.enemies.each(e -> {
 			if(e.attack > 0 && e.hit.overlaps(hit)){
 				hurt();
 			}
 		});
+	}
+
+	private function getLegAngle(min:Float, max:Float, offset:Float) {
+		var p = Math.sin(legTimer + offset);
+		return min + (max - min) * p;
 	}
 
 	function set_health(value:Int):Int {
@@ -87,6 +121,7 @@ class Player extends AbstractObject{
 	private function hurt(){
 		health--;
 		if(health < 1){
+			//TODO gameover
 			screen.gameover = true;
 		}
 	}

@@ -1,12 +1,16 @@
 package resources;
 
-import js.html.ImageElement;
 import js.Browser;
-import js.html.CanvasElement;
+import js.html.ImageElement;
 import js.lib.Promise;
 
 @:native("Res")
 class Resources {
+	public static inline var UNI_BODY = "b";
+	public static inline var UNI_MOUTH_UP = "u";
+	public static inline var UNI_MOUTH_LOW = "d";
+	public static inline var UNI_LEG = "l";
+
 	@:native("rq")
 	public static var resourceQty:Int = 0;
 	@:native("lq")
@@ -21,7 +25,10 @@ class Resources {
 	@:native("l")
 	public static function load() {
 		var loaders = [
-			//() -> loadImage("name", ResourceBuilder.buildImage("file.svg")),
+			() -> loadImage(UNI_BODY, ResourceBuilder.buildImage("u-b.svg")),
+			() -> loadImage(UNI_MOUTH_UP, ResourceBuilder.buildImage("u-mu.svg")),
+			() -> loadImage(UNI_MOUTH_LOW, ResourceBuilder.buildImage("u-ml.svg")),
+			() -> loadImage(UNI_LEG, ResourceBuilder.buildImage("u-l.svg"))
 		];
 
 		resourceQty = loaders.length;
