@@ -8,16 +8,30 @@ class Player extends AbstractObject{
 	private static inline var SPEED:Float = 1500;
 	private static inline var FOCUS_SPEED:Float = 500;
 	private static inline var SHOOT_DELAY:Float = .2;
+	private static inline var TAIL_SPEED:Float = 3;
+	private static inline var TAIL_ANGLE_MAX:Float = 3.14 * 0.4;
+	private static inline var TAIL_ANGLE_MIN:Float = -3.14 * 0.4;
 	private var cd:Vec2;
 
+	@:native("fc")
 	private var shootCooldown:Float = 0;
+	@:native("h")
 	public var health(default, set):Int = 1;
 
+	@:native("sb")
 	private var spBody:ImageElement;
+	@:native("sml")
 	private var spMouthL:ImageElement;
+	@:native("smu")
 	private var spMouthU:ImageElement;
+	@:native("sl")
 	private var spLeg:Sprite;
+	@:native("st")
+	private var spTail:Sprite;
+	@:native("tl")
 	private var legTimer:Float = 0;
+	@:native("tt")
+	private var tailAngle:Float = 0;
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -34,6 +48,7 @@ class Player extends AbstractObject{
 		spMouthL = Resources.images.get(Resources.UNI_MOUTH_LOW);
 		spMouthU = Resources.images.get(Resources.UNI_MOUTH_UP);
 		spLeg = new Sprite(Resources.images.get(Resources.UNI_LEG), 5, 5);
+		spTail = new Sprite(Resources.images.get(Resources.UNI_TAIL), 83, 15);
 	}
 
 	override public function update(s:Float) {
@@ -66,15 +81,19 @@ class Player extends AbstractObject{
 
 		if(pos.x < 64){
 			pos.x = 64;
+			vel.x = 0;
 		}
 		if(pos.x > Main.canvas.width - 64){
 			pos.x = Main.canvas.width - 64;
+			vel.x = 0;
 		}
 		if(pos.y < 64){
 			pos.y = 64;
+			vel.y = 0;
 		}
 		if(pos.y > Main.canvas.height - 64){
 			pos.y = Main.canvas.height - 64;
+			vel.y = 0;
 		}
 
 		updateBox(hit, hitOffset);
@@ -85,12 +104,33 @@ class Player extends AbstractObject{
 		//Main.context.fillStyle = "#000";
 		//Main.context.fillRect(hit.x, hit.y, hit.w, hit.h);
 
+		var spd = TAIL_SPEED * s;
+		if(vel.y > 5){
+			tailAngle += spd;
+		}else if(vel.y < -5){
+			tailAngle -= spd;
+		}else if(tailAngle != 0){
+			if(Math.abs(tailAngle) < spd){
+				tailAngle = 0;
+			}else{
+				tailAngle = tailAngle > 0 ? (tailAngle - spd) : (tailAngle + spd);
+			}
+		}
+		if(tailAngle > TAIL_ANGLE_MAX){
+			tailAngle = TAIL_ANGLE_MAX;
+		}
+		if(tailAngle < TAIL_ANGLE_MIN){
+			tailAngle = TAIL_ANGLE_MIN;
+		}
+
 		legTimer += Math.PI * s;
 		// behind
 		Main.context.filter = "brightness(90%)"; 
 		spLeg.draw(Main.context, pos.x-115+105, pos.y-110+200, getLegAngle(-Math.PI * .1, Math.PI * .1, 1));
 		spLeg.draw(Main.context, pos.x-115+15, pos.y-110+200, getLegAngle(Math.PI * .3, Math.PI * .4, 1));
 		Main.context.filter = "brightness(100%)"; 
+
+		spTail.draw(Main.context, pos.x-115+95, pos.y-110+175, tailAngle);
 
 		// main
 		Main.context.drawImage(spBody, pos.x-115, pos.y-110);

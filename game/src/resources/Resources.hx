@@ -10,6 +10,7 @@ class Resources {
 	public static inline var UNI_MOUTH_UP = "u";
 	public static inline var UNI_MOUTH_LOW = "d";
 	public static inline var UNI_LEG = "l";
+	public static inline var UNI_TAIL = "t";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -25,10 +26,11 @@ class Resources {
 	@:native("l")
 	public static function load() {
 		var loaders = [
-			() -> loadImage(UNI_BODY, ResourceBuilder.buildImage("u-b.svg")),
-			() -> loadImage(UNI_MOUTH_UP, ResourceBuilder.buildImage("u-mu.svg")),
-			() -> loadImage(UNI_MOUTH_LOW, ResourceBuilder.buildImage("u-ml.svg")),
-			() -> loadImage(UNI_LEG, ResourceBuilder.buildImage("u-l.svg"))
+			() -> loadImage(UNI_BODY, ResourceBuilder.buildImage("uni-body.svg")),
+			() -> loadImage(UNI_MOUTH_UP, ResourceBuilder.buildImage("uni-mouth-upper.svg")),
+			() -> loadImage(UNI_MOUTH_LOW, ResourceBuilder.buildImage("uni-mouth-lower.svg")),
+			() -> loadImage(UNI_LEG, ResourceBuilder.buildImage("uni-leg.svg")),
+			() -> loadImage(UNI_TAIL, ResourceBuilder.buildImage("uni-tail.svg"))
 		];
 
 		resourceQty = loaders.length;

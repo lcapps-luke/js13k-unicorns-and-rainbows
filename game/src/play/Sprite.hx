@@ -5,7 +5,9 @@ import js.html.ImageElement;
 import math.Vec2;
 
 class Sprite{
+	@:native("i")
 	public var imageElement(default, null):ImageElement;
+	@:native("o")
 	private var origin:Vec2;
 
 	public function new(i:ImageElement, ox:Float, oy:Float){
@@ -16,7 +18,7 @@ class Sprite{
 	public function draw(c:CanvasRenderingContext2D, x:Float, y:Float, a:Float){
 		c.save();
 		c.translate(x - origin.x, y - origin.y);
-		c.rotate(a);trace(a);
+		c.rotate(a);
 		c.drawImage(imageElement, -origin.x, -origin.y);
 		c.restore();
 	}
