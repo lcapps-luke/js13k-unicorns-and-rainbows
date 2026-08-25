@@ -11,6 +11,8 @@ class Resources {
 	public static inline var UNI_MOUTH_LOW = "d";
 	public static inline var UNI_LEG = "l";
 	public static inline var UNI_TAIL = "t";
+	public static inline var CLOUD = "c";
+	public static inline var LIGHTNING = "i";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -30,7 +32,9 @@ class Resources {
 			() -> loadImage(UNI_MOUTH_UP, ResourceBuilder.buildImage("uni-mouth-upper.svg")),
 			() -> loadImage(UNI_MOUTH_LOW, ResourceBuilder.buildImage("uni-mouth-lower.svg")),
 			() -> loadImage(UNI_LEG, ResourceBuilder.buildImage("uni-leg.svg")),
-			() -> loadImage(UNI_TAIL, ResourceBuilder.buildImage("uni-tail.svg"))
+			() -> loadImage(UNI_TAIL, ResourceBuilder.buildImage("uni-tail.svg")),
+			() -> loadImage(CLOUD, ResourceBuilder.buildImage("cloud.svg")),
+			() -> loadImage(LIGHTNING, ResourceBuilder.buildImage("lightning.svg"))
 		];
 
 		resourceQty = loaders.length;
