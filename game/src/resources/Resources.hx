@@ -13,6 +13,8 @@ class Resources {
 	public static inline var UNI_TAIL = "t";
 	public static inline var CLOUD = "c";
 	public static inline var LIGHTNING = "i";
+	public static inline var BG_CLOUD_NEAR = "n";
+	public static inline var BG_CLOUD_FAR = "f";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -28,13 +30,17 @@ class Resources {
 	@:native("l")
 	public static function load() {
 		var loaders = [
-			() -> loadImage(UNI_BODY, ResourceBuilder.buildImage("uni-body.svg")),
-			() -> loadImage(UNI_MOUTH_UP, ResourceBuilder.buildImage("uni-mouth-upper.svg")),
-			() -> loadImage(UNI_MOUTH_LOW, ResourceBuilder.buildImage("uni-mouth-lower.svg")),
-			() -> loadImage(UNI_LEG, ResourceBuilder.buildImage("uni-leg.svg")),
-			() -> loadImage(UNI_TAIL, ResourceBuilder.buildImage("uni-tail.svg")),
-			() -> loadImage(CLOUD, ResourceBuilder.buildImage("cloud.svg")),
-			() -> loadImage(LIGHTNING, ResourceBuilder.buildImage("lightning.svg"))
+			() -> loadSVG(UNI_BODY, ResourceBuilder.buildImage("uni-body.svg")),
+			() -> loadSVG(UNI_MOUTH_UP, ResourceBuilder.buildImage("uni-mouth-upper.svg")),
+			() -> loadSVG(UNI_MOUTH_LOW, ResourceBuilder.buildImage("uni-mouth-lower.svg")),
+			() -> loadSVG(UNI_LEG, ResourceBuilder.buildImage("uni-leg.svg")),
+			() -> loadSVG(UNI_TAIL, ResourceBuilder.buildImage("uni-tail.svg")),
+			() -> loadSVG(CLOUD, ResourceBuilder.buildImage("cloud.svg")),
+			() -> loadSVG(LIGHTNING, ResourceBuilder.buildImage("lightning.svg")),
+			() -> loadSVG(BG_CLOUD_NEAR, ResourceBuilder.buildImage("bg_cloud_near.svg")),
+			() -> loadSVG(BG_CLOUD_FAR, ResourceBuilder.buildImage("bg_cloud_far.svg")),
+			() -> loadBg(),
+			() -> loadStars()
 		];
 
 		resourceQty = loaders.length;
@@ -65,10 +71,12 @@ class Resources {
 		return gradient;
 	}
 
+	private static function loadSVG(name:String, data:String):Promise<Int> {
+		return loadImage(name, "data:image/svg+xml;base64," + Browser.window.btoa(data));
+	}
 
-	private static function loadImage(name:String, data:String):Promise<Int> {
+	private static function loadImage(name:String, url:String):Promise<Int> {
 		return new Promise((resolve, reject) -> {
-			var d = "data:image/svg+xml;base64," + Browser.window.btoa(data);
 			var i:ImageElement = Browser.document.createImageElement();
 			i.onload = () -> {
 				images.set(name, i);
@@ -77,8 +85,51 @@ class Resources {
 			i.onerror = function(e) {
 				reject(e);
 			}
-			i.setAttribute("src", d);
+			i.setAttribute("src", url);
 		});
+	}
+
+	private static function loadBg(){
+		return new Promise((resolve, reject) -> {
+			var gradient = Main.context.createLinearGradient(0, 0, 0, 1080);
+			gradient.addColorStop(0.4, "#002");
+			gradient.addColorStop(1, "#036");
+
+			var c = createCanvas(1920, 1080);
+			var con = c.getContext2d();
+			con.fillStyle = gradient;
+			con.fillRect(0, 0, 1920, 1080);
+
+			loadImage("BG", c.toDataURL()).then(resolve, reject);
+		});
+	}
+
+	private static function loadStars(){
+		return new Promise((resolve, reject) -> {
+			var c = createCanvas(20, 20);
+			var con = c.getContext2d();
+			con.strokeStyle = "#fff";
+			con.lineWidth = 5;
+			
+			con.beginPath();
+			con.moveTo(0, 10);
+			con.lineTo(20, 10);
+			con.stroke();
+
+			con.beginPath();
+			con.moveTo(10, 0);
+			con.lineTo(10, 20);
+			con.stroke();
+
+			loadImage("BGS", c.toDataURL()).then(resolve, reject);
+		});
+	}
+
+	private static function createCanvas(w:Int, h:Int){
+		var c = Browser.document.createCanvasElement();
+		c.width = w;
+		c.height = h;
+		return c;
 	}
 
 }

@@ -99,8 +99,8 @@ class Player extends AbstractObject{
 		updateBox(hit, hitOffset);
 		updateBox(bound, boundOffset);
 
-		Main.context.fillStyle = "#555";
-		Main.context.fillRect(bound.x, bound.y, bound.w, bound.h);
+		//Main.context.fillStyle = "#555";
+		//Main.context.fillRect(bound.x, bound.y, bound.w, bound.h);
 		//Main.context.fillStyle = "#000";
 		//Main.context.fillRect(hit.x, hit.y, hit.w, hit.h);
 

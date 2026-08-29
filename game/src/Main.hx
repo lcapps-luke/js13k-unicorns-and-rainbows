@@ -3,6 +3,7 @@ package;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
+import math.AABB;
 import menu.MenuScreen;
 
 @:native("M")
@@ -18,6 +19,9 @@ class Main{
 
 	@:native("sc")
 	public static var screen:IScreen;
+
+	@:native("sz")
+	public static var size = new AABB(0, 0, 1920, 1080);
 
 	public static function main(){
 		canvas = cast Browser.document.getElementById("c");
@@ -37,8 +41,7 @@ class Main{
 	private static function update(s:Float){
 		var d = (s - lastFrame) / 1000;
 
-		context.fillStyle = "#004";
-		context.fillRect(0, 0, canvas.width, canvas.height);
+		context.clearRect(0, 0, canvas.width, canvas.height);
 
 		Ctrl.update();
 

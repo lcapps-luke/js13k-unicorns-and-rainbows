@@ -53,6 +53,10 @@ class Enemy extends AbstractObject{
 				b.alive = false;
 			}
 		});
+
+		if(bound.x + bound.w < 0){
+			alive = false;
+		}
 	}
 
 	function set_health(value:Int):Int {
