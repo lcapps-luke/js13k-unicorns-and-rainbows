@@ -2,7 +2,9 @@ package play;
 
 import menu.MenuScreen;
 import play.enemy.ActionCloud;
+import play.enemy.ActionSimple;
 import play.enemy.DisplayCloud;
+import play.enemy.DisplayMud;
 import play.enemy.Enemy;
 import resources.Resources;
 
@@ -21,6 +23,8 @@ class PlayScreen implements IScreen{
 
 	private var dispCloud = new DisplayCloud();
 	private var actCloud = new ActionCloud();
+	private var dispMud = new DisplayMud();
+	private var actSimple = new ActionSimple();
 
 	public var gameover:Bool = false;
 	private var gameoverTimer:Float = 3;
@@ -94,8 +98,7 @@ class PlayScreen implements IScreen{
 
 		spawnTimer -= s;
 		if(spawnTimer < 0){
-			spawnTimer = 3;
-
+			spawnTimer = 1.5;
 			spawnEnemy();
 		}
 
@@ -112,7 +115,14 @@ class PlayScreen implements IScreen{
 	}
 
 	private function spawnEnemy(){
+		var r = Math.random();
+
 		var e:Enemy = enemies.recycle(() -> new Enemy(this));
-		e.init(1920 + 128, Math.random() * 16 + 48, dispCloud, actCloud);
+
+		if(r > 0.1){
+			e.init(1920 + 48, 100 + Math.random() * 980, dispMud, actSimple);
+		}else{
+			e.init(1920 + 128, Math.random() * 16 + 48, dispCloud, actCloud);
+		}
 	}
 }

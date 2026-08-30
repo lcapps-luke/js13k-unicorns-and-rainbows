@@ -15,6 +15,7 @@ class Resources {
 	public static inline var LIGHTNING = "i";
 	public static inline var BG_CLOUD_NEAR = "n";
 	public static inline var BG_CLOUD_FAR = "f";
+	public static inline var MUD = "m";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -39,6 +40,7 @@ class Resources {
 			() -> loadSVG(LIGHTNING, ResourceBuilder.buildImage("lightning.svg")),
 			() -> loadSVG(BG_CLOUD_NEAR, ResourceBuilder.buildImage("bg_cloud_near.svg")),
 			() -> loadSVG(BG_CLOUD_FAR, ResourceBuilder.buildImage("bg_cloud_far.svg")),
+			() -> loadSVG(MUD, ResourceBuilder.buildImage("mud.svg")),
 			() -> loadBg(),
 			() -> loadStars()
 		];

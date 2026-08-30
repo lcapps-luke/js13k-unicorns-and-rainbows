@@ -5,7 +5,7 @@ class ActionCloud implements IAction{
 
 	public function init(e:Enemy) {
 		e.vel.set(-128, 0);
-		e.health = 3;
+		e.health = 10;
 	}
 
 	public function update(p:PlayScreen, s:Float, e:Enemy) {
