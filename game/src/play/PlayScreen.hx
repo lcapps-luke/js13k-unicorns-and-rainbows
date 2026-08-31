@@ -56,7 +56,6 @@ class PlayScreen implements IScreen{
 			p.filter = f ? "brightness(50%)" : "brightness(70%)";
 
 			sx -= p.vel.x * t;
-			trace('Spawned at $sx');
 		}
 	}
 	

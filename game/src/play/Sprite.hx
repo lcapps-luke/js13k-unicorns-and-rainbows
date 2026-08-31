@@ -17,7 +17,7 @@ class Sprite{
 
 	public function draw(c:CanvasRenderingContext2D, x:Float, y:Float, a:Float){
 		c.save();
-		c.translate(x - origin.x, y - origin.y);
+		c.translate(x, y);
 		c.rotate(a);
 		c.drawImage(imageElement, -origin.x, -origin.y);
 		c.restore();

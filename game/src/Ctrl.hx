@@ -124,6 +124,7 @@ class Ctrl {
 		
 		focus = checkKeys(["ShiftLeft", "Semicolon"]) || checkButtons([4, 2, 1], []);
 		fire = checkKeys(["Space", "KeyK", "KeyZ"]) || checkButtons([5, 0], []);
+		rainbow = checkKeys(["KeyJ", "KeyX"]) || checkButtons([7, 6, 3], []);
 	}
 
 	@:native("ck")

@@ -5,11 +5,11 @@ class Enemy extends AbstractObject{
 	private var action:IAction;
 	public var health(default, set):Int;
 
-	public var hitFlash:Float = 0;
 	public var signal:Float = 0;
 	public var attack:Float = 0;
 	public var phase:Int = 0;
 	public var timer:Float = 0;
+	public var iTimer:Float = 0;
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -29,9 +29,6 @@ class Enemy extends AbstractObject{
 
 	override public function update(s:Float) {
 		action.update(screen, s, this);
-		if(hitFlash > 0){
-			hitFlash -= s*3;
-		}
 		if(signal > 0){
 			signal -= s;
 		}
@@ -41,6 +38,9 @@ class Enemy extends AbstractObject{
 		if(timer > 0){
 			timer -= s;
 		}
+		if(iTimer > 0){
+			iTimer -= s;
+		}
 
 		super.update(s);
 
@@ -48,8 +48,7 @@ class Enemy extends AbstractObject{
 
 		screen.playerBullets.each(b -> {
 			if(b.hit.overlaps(bound)){
-				hitFlash = 1;
-				health--;
+				hurt();
 				b.alive = false;
 			}
 		});
@@ -66,5 +65,14 @@ class Enemy extends AbstractObject{
 
 	public function canHit(){
 		return attack > 0;
+	}
+
+	public function hurt() {
+		if(iTimer > 0){
+			return;
+		}
+		
+		iTimer = 0.1;
+		health--;
 	}
 }

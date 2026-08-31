@@ -6,6 +6,9 @@ class AABB{
 	public var w:Float;
 	public var h:Float;
 
+	public var b(get, null):Float;
+	public var r(get, null):Float;
+
 	public function new(x:Float = 0, y:Float = 0, w:Float = 0, h:Float = 0){
 		this.x = x;
 		this.y = y;
@@ -22,42 +25,50 @@ class AABB{
 
 	public function overlaps(o:AABB):Bool{
 		return !(
-			x + w < o.x ||
-			x > o.x + o.w ||
-			y + h < o.y ||
-			y > o.y + o.h
+			r < o.x ||
+			x > o.r ||
+			b < o.y ||
+			y > o.b
 		);
 	}
 
 	public function centerX() {
-		return x + w / 2;
+		return r / 2;
 	}
 	public function centerY() {
-		return y + h / 2;
+		return b / 2;
 	}
 
 	public function contains(ox, oy) {
 		return !(
 			ox < x ||
-			ox > x + w ||
+			ox > r ||
 			oy < y ||
-			oy > y + h
+			oy > b
 		);
 	}
 
 	@:native("mx")
 	public function moveContactX(o:AABB, m:Float):Float {
-		return moveContact(x, x + w, o.x, o.x + o.w, m);
+		return moveContact(x, r, o.x, o.r, m);
 	}
 
 	@:native("my")
 	public function moveContactY(o:AABB, m:Float):Float {
-		return moveContact(y, y + h, o.y, o.y + o.h, m);
+		return moveContact(y, b, o.y, o.b, m);
 	}
 
 	@:native("mc")
 	private static function moveContact(l:Float, h:Float, ol:Float, oh:Float, m:Float):Float {
 		var d:Float = (m > 0 ? ol - h : oh - l) * 0.9;
 		return m > 0 ? Math.min(Math.abs(d), Math.abs(m)) : -Math.min(Math.abs(d), Math.abs(m));
+	}
+
+	function get_b():Float {
+		return y + h;
+	}
+
+	function get_r():Float {
+		return x + w;
 	}
 }

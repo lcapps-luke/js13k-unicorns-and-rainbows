@@ -1,7 +1,10 @@
 package play;
 
 import js.html.ImageElement;
+import js.lib.Math;
+import math.AABB;
 import math.Vec2;
+import play.enemy.Enemy;
 import resources.Resources;
 
 class Player extends AbstractObject{
@@ -11,6 +14,7 @@ class Player extends AbstractObject{
 	private static inline var TAIL_SPEED:Float = 3;
 	private static inline var TAIL_ANGLE_MAX:Float = 3.14 * 0.4;
 	private static inline var TAIL_ANGLE_MIN:Float = -3.14 * 0.4;
+	private static inline var MOUTH_ANGLE_MAX:Float = 0.2 * 3.14;
 	private var cd:Vec2;
 
 	@:native("fc")
@@ -21,9 +25,9 @@ class Player extends AbstractObject{
 	@:native("sb")
 	private var spBody:ImageElement;
 	@:native("sml")
-	private var spMouthL:ImageElement;
+	private var spMouthL:Sprite;
 	@:native("smu")
-	private var spMouthU:ImageElement;
+	private var spMouthU:Sprite;
 	@:native("sl")
 	private var spLeg:Sprite;
 	@:native("st")
@@ -32,6 +36,9 @@ class Player extends AbstractObject{
 	private var legTimer:Float = 0;
 	@:native("tt")
 	private var tailAngle:Float = 0;
+	private var mouthAngle:Float = 0;
+
+	private var beamBox = new AABB(0, 0, 1920, 32);
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -45,8 +52,8 @@ class Player extends AbstractObject{
 		cd = new Vec2();
 
 		spBody = Resources.images.get(Resources.UNI_BODY);
-		spMouthL = Resources.images.get(Resources.UNI_MOUTH_LOW);
-		spMouthU = Resources.images.get(Resources.UNI_MOUTH_UP);
+		spMouthL = new Sprite(Resources.images.get(Resources.UNI_MOUTH_LOW), 14, 20);
+		spMouthU = new Sprite(Resources.images.get(Resources.UNI_MOUTH_UP), 12, 18);
 		spLeg = new Sprite(Resources.images.get(Resources.UNI_LEG), 5, 5);
 		spTail = new Sprite(Resources.images.get(Resources.UNI_TAIL), 83, 15);
 	}
@@ -126,26 +133,64 @@ class Player extends AbstractObject{
 		legTimer += Math.PI * s;
 		// behind
 		Main.context.filter = "brightness(90%)"; 
-		spLeg.draw(Main.context, pos.x-115+105, pos.y-110+200, getLegAngle(-Math.PI * .1, Math.PI * .1, 1));
-		spLeg.draw(Main.context, pos.x-115+15, pos.y-110+200, getLegAngle(Math.PI * .3, Math.PI * .4, 1));
+		spLeg.draw(Main.context, pos.x-8, pos.y+94, getLegAngle(-Math.PI * .1, Math.PI * .1, 1));
+		spLeg.draw(Main.context, pos.x-102, pos.y+94, getLegAngle(Math.PI * .3, Math.PI * .4, 1));
 		Main.context.filter = "brightness(100%)"; 
 
-		spTail.draw(Main.context, pos.x-115+95, pos.y-110+175, tailAngle);
+		spTail.draw(Main.context, pos.x-104, pos.y+51, tailAngle);
 
 		// main
 		Main.context.drawImage(spBody, pos.x-115, pos.y-110);
-		Main.context.drawImage(spMouthU, pos.x-115+139, pos.y-110+99);
-		Main.context.drawImage(spMouthL, pos.x-115+119, pos.y-110+126);
+		spMouthU.draw(Main.context, pos.x + 37, pos.y+7, -mouthAngle);
+		spMouthL.draw(Main.context, pos.x+19, pos.y+35, mouthAngle * .3);
 
 		// front
-		spLeg.draw(Main.context, pos.x-115+105, pos.y-110+200, getLegAngle(-Math.PI * .1, Math.PI * .1, 0));
-		spLeg.draw(Main.context, pos.x-115+15, pos.y-110+200, getLegAngle(Math.PI * .3, Math.PI * .4, 0));
+		spLeg.draw(Main.context, pos.x-9, pos.y+94, getLegAngle(-Math.PI * .1, Math.PI * .1, 0));
+		spLeg.draw(Main.context, pos.x-102, pos.y+94, getLegAngle(Math.PI * .3, Math.PI * .4, 0));
+
+		var beam = Ctrl.rainbow;
+		var beamHitX:Float = 1920;
+		var hitEnemy:Enemy = null;
+		if(beam){
+			beamBox.x = pos.x + 76;
+			beamBox.y = pos.y;
+			beamBox.w = 1920 - beamBox.x;
+		}
 		
 		screen.enemies.each(e -> {
 			if(e.attack > 0 && e.hit.overlaps(hit)){
 				hurt();
 			}
+
+			if(beam && beamBox.overlaps(e.bound)){
+				if(e.bound.x < beamHitX){
+					hitEnemy = e;
+					beamHitX = e.bound.x;
+				}
+			}
 		});
+
+		if(beam){
+			beamBox.w = beamHitX - beamBox.x;
+			
+			Main.context.fillStyle = Resources.rainbowGradient(0, beamBox.y, 0, beamBox.b);
+			Main.context.fillRect(beamBox.x, beamBox.y, beamBox.w, beamBox.h);
+
+			if(hitEnemy != null){
+				hitEnemy.hurt();
+			}
+
+			if(mouthAngle < MOUTH_ANGLE_MAX){
+				mouthAngle += MOUTH_ANGLE_MAX * s * 5;
+			}
+		}else{
+			if(mouthAngle > 0){
+				mouthAngle -= MOUTH_ANGLE_MAX * s * 5;
+			}
+			if (mouthAngle < 0){
+				mouthAngle = 0;
+			}
+		}
 	}
 
 	private function getLegAngle(min:Float, max:Float, offset:Float) {
