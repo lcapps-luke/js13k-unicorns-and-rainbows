@@ -74,5 +74,9 @@ class Enemy extends AbstractObject{
 		
 		iTimer = 0.1;
 		health--;
+
+		if(!alive){
+			this.screen.onEnemyKill(this);	
+		}
 	}
 }

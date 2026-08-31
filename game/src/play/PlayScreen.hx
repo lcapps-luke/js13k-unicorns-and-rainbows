@@ -14,10 +14,13 @@ class PlayScreen implements IScreen{
 	private static inline var STAR_SPEED_MIN = 30.0;
 	private static inline var STAR_SPEED_MAX = 50.0;
 	private static inline var STAR_TIME_PREFIL = 1920 / STAR_SPEED_MIN;
+	private static inline var DOUGHNUT_QTY_MAX = 3;
+	private static var DOUGHNUT_CHANCE = [1/*0.2*/, 0.1, 0.05, 0];
 
 	public var player(default, null):Player;
 	public var playerBullets(default, null):ObjArray<PlayerBullet>;
 	public var enemies(default, null):ObjArray<Enemy>;
+	public var doughnuts(default, null):ObjArray<Doughnut>;
 
 	private var spawnTimer = 3.0;
 
@@ -41,6 +44,7 @@ class PlayScreen implements IScreen{
 		player = new Player(this);
 		playerBullets = new ObjArray<PlayerBullet>();
 		enemies = new ObjArray<Enemy>();
+		doughnuts = new ObjArray<Doughnut>();
 
 		var st = 0.0;
 		var sx = 0.0;
@@ -94,13 +98,13 @@ class PlayScreen implements IScreen{
 		}
 		playerBullets.update(s);
 		enemies.update(s);
+		doughnuts.update(s);
 
 		spawnTimer -= s;
 		if(spawnTimer < 0){
 			spawnTimer = 1.5;
 			spawnEnemy();
 		}
-
 
 		if(gameover){
 			gameoverTimer -= s;
@@ -122,6 +126,22 @@ class PlayScreen implements IScreen{
 			e.init(1920 + 48, 100 + Math.random() * 980, dispMud, actSimple);
 		}else{
 			e.init(1920 + 128, Math.random() * 16 + 48, dispCloud, actCloud);
+		}
+	}
+
+	public function onEnemyKill(e:Enemy){
+		var nutQty = player.doughnuts + doughnuts.alive;
+		var chance = DOUGHNUT_CHANCE[nutQty];
+		if(Math.random() < chance){
+			spawnDoughnut(e.bound.centerX(), e.bound.centerY(), false);
+		}
+	}
+
+	public function spawnDoughnut(x:Float, y:Float, burst:Bool) {
+		var n = doughnuts.recycle(() -> new Doughnut(this));
+		n.init(x, y);
+		if(burst){
+			n.launch();
 		}
 	}
 }

@@ -33,10 +33,10 @@ class AABB{
 	}
 
 	public function centerX() {
-		return r / 2;
+		return x + w / 2;
 	}
 	public function centerY() {
-		return b / 2;
+		return y + h / 2;
 	}
 
 	public function contains(ox, oy) {

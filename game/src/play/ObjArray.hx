@@ -2,6 +2,7 @@ package play;
 
 class ObjArray<T:AbstractObject>{
 	private var inner:Array<T>;
+	public var alive(default, null):Int;
 
 	public function new(){
 		inner = new Array<T>();
@@ -23,9 +24,11 @@ class ObjArray<T:AbstractObject>{
 	}
 
 	public function each(c:T -> Void){
+		alive = 0;
 		for(o in inner){
 			if(o.alive){
 				c(o);
+				alive++;
 			}
 		}
 	}

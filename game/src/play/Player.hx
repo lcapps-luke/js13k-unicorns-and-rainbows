@@ -15,12 +15,12 @@ class Player extends AbstractObject{
 	private static inline var TAIL_ANGLE_MAX:Float = 3.14 * 0.4;
 	private static inline var TAIL_ANGLE_MIN:Float = -3.14 * 0.4;
 	private static inline var MOUTH_ANGLE_MAX:Float = 0.2 * 3.14;
+	private static inline var BULLET_GAP:Float = 48;
+	private static inline var DOUGHNUT_ANGLE:Float = 0.1 * 3.14;
 	private var cd:Vec2;
 
 	@:native("fc")
 	private var shootCooldown:Float = 0;
-	@:native("h")
-	public var health(default, set):Int = 1;
 
 	@:native("sb")
 	private var spBody:ImageElement;
@@ -39,6 +39,10 @@ class Player extends AbstractObject{
 	private var mouthAngle:Float = 0;
 
 	private var beamBox = new AABB(0, 0, 1920, 32);
+	public var doughnuts:Int = 3;
+	private var nutSpr:Sprite;
+	private var nutPos = [5, 55, 10, 66, 14, 76];
+	public var iTimer:Float = 0;
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -56,6 +60,7 @@ class Player extends AbstractObject{
 		spMouthU = new Sprite(Resources.images.get(Resources.UNI_MOUTH_UP), 12, 18);
 		spLeg = new Sprite(Resources.images.get(Resources.UNI_LEG), 5, 5);
 		spTail = new Sprite(Resources.images.get(Resources.UNI_TAIL), 83, 15);
+		nutSpr = new Sprite(Resources.images.get(Resources.DOUGHNUT), 25, 10);
 	}
 
 	override public function update(s:Float) {
@@ -77,7 +82,14 @@ class Player extends AbstractObject{
 		}
 
 		if(Ctrl.fire && shootCooldown <= 0){
-			screen.playerBullets.recycle(() -> new PlayerBullet(screen)).init(pos.x, pos.y);
+			var q = doughnuts + 1;
+			var yy = pos.y - (q * BULLET_GAP) / 2;
+			for(i in 0...q){
+				screen.playerBullets.recycle(() -> new PlayerBullet(screen)).init(pos.x, yy);
+				yy += BULLET_GAP;
+			}
+
+			
 			shootCooldown = SHOOT_DELAY;
 		}
 		if(shootCooldown > 0){
@@ -148,6 +160,15 @@ class Player extends AbstractObject{
 		spLeg.draw(Main.context, pos.x-9, pos.y+94, getLegAngle(-Math.PI * .1, Math.PI * .1, 0));
 		spLeg.draw(Main.context, pos.x-102, pos.y+94, getLegAngle(Math.PI * .3, Math.PI * .4, 0));
 
+		// doughnuts
+		var dx = pos.x + 5;
+		var dy = pos.y - 55;
+		for(i in 0...doughnuts){
+			nutSpr.draw(Main.context, dx, dy, DOUGHNUT_ANGLE);
+			dx += 8;
+			dy -= 16;
+		}
+
 		var beam = Ctrl.rainbow;
 		var beamHitX:Float = 1920;
 		var hitEnemy:Enemy = null;
@@ -167,6 +188,12 @@ class Player extends AbstractObject{
 					hitEnemy = e;
 					beamHitX = e.bound.x;
 				}
+			}
+		});
+		screen.doughnuts.each(d -> {
+			if(d.cooldown <= 0 && d.bound.overlaps(bound)){
+				d.alive = false;
+				doughnuts++;
 			}
 		});
 
@@ -191,6 +218,10 @@ class Player extends AbstractObject{
 				mouthAngle = 0;
 			}
 		}
+
+		if(iTimer > 0){
+			iTimer -= s;
+		}
 	}
 
 	private function getLegAngle(min:Float, max:Float, offset:Float) {
@@ -198,16 +229,21 @@ class Player extends AbstractObject{
 		return min + (max - min) * p;
 	}
 
-	function set_health(value:Int):Int {
-		alive = value > 0;
-		return health = value;
-	}
-
 	private function hurt(){
-		health--;
-		if(health < 1){
+		if(iTimer > 0){
+			return;
+		}
+		
+		if(doughnuts == 0){
 			//TODO gameover
 			screen.gameover = true;
+			alive = false;
 		}
+
+		for(i in 0... doughnuts){
+			screen.spawnDoughnut(pos.x, pos.y, true);
+		}
+		doughnuts = 0;
+		iTimer = 1.5;
 	}
 }
