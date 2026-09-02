@@ -11,6 +11,7 @@ class Doughnut extends AbstractObject{
 	private var frc:Float = 0.3;
 	private var acc:Float = 0;
 	public var cooldown:Float = 0;
+	public var score:Int = 50;
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -55,11 +56,13 @@ class Doughnut extends AbstractObject{
 		vel.set(-100, 0);
 		acc = 0;
 		cooldown = 0;
+		score = 50;
 	}
 
 	public function launch() {
 		vel.setLenDir(700, LAUNCH_MIN + Math.random() * LAUNCH_MAX);
 		acc = 200;
 		cooldown = 0.5;
+		score = 0;
 	}
 }

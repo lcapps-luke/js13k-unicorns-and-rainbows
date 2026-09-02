@@ -11,6 +11,8 @@ class Enemy extends AbstractObject{
 	public var timer:Float = 0;
 	public var iTimer:Float = 0;
 
+	public var score:Int = 1;
+
 	public function new(screen:PlayScreen){
 		super(screen);
 	}

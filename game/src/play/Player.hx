@@ -39,7 +39,7 @@ class Player extends AbstractObject{
 	private var mouthAngle:Float = 0;
 
 	private var beamBox = new AABB(0, 0, 1920, 32);
-	public var doughnuts:Int = 3;
+	public var doughnuts:Int = 0;
 	private var nutSpr:Sprite;
 	private var nutPos = [5, 55, 10, 66, 14, 76];
 	public var iTimer:Float = 0;
@@ -194,6 +194,7 @@ class Player extends AbstractObject{
 			if(d.cooldown <= 0 && d.bound.overlaps(bound)){
 				d.alive = false;
 				doughnuts++;
+				screen.score += d.score;
 			}
 		});
 

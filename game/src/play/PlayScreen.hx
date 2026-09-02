@@ -39,6 +39,8 @@ class PlayScreen implements IScreen{
 	private var bgCfx = 0.0;
 	private var bgParticles = new ObjArray<Particle>();
 	private var bgSTimer:Float = 0;
+
+	public var score:Int = 0;
 	
 	public function new(){
 		player = new Player(this);
@@ -115,6 +117,13 @@ class PlayScreen implements IScreen{
 
 		Main.context.drawImage(bgCn, bgCnx, 1080-170);
 		Main.context.drawImage(bgCn, bgCnx + 1920, 1080-170);
+
+		// HUD
+		Main.context.fillStyle = "#fff";
+		Main.context.font = "bold 48px cursive";
+		var txt = "SCORE: " + StringTools.lpad(Std.string(score), "0", 6);
+		var txtWidth = Main.context.measureText(txt).width;
+		Main.context.fillText(txt, 1920 - txtWidth - 50, 50);
 	}
 
 	private function spawnEnemy(){
@@ -135,6 +144,8 @@ class PlayScreen implements IScreen{
 		if(Math.random() < chance){
 			spawnDoughnut(e.bound.centerX(), e.bound.centerY(), false);
 		}
+
+		score += e.score;
 	}
 
 	public function spawnDoughnut(x:Float, y:Float, burst:Bool) {
