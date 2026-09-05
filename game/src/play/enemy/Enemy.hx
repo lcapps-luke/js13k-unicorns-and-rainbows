@@ -69,13 +69,13 @@ class Enemy extends AbstractObject{
 		return attack > 0;
 	}
 
-	public function hurt() {
+	public function hurt(h:Int = 1){
 		if(iTimer > 0){
 			return;
 		}
 		
 		iTimer = 0.1;
-		health--;
+		health-=h;
 
 		if(!alive){
 			this.screen.onEnemyKill(this);	

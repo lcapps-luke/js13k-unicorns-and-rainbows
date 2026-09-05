@@ -17,6 +17,7 @@ class Player extends AbstractObject{
 	private static inline var MOUTH_ANGLE_MAX:Float = 0.2 * 3.14;
 	private static inline var BULLET_GAP:Float = 48;
 	private static inline var DOUGHNUT_ANGLE:Float = 0.1 * 3.14;
+	public static inline var BEAM_TIMER_MAX:Int = 5;
 	private var cd:Vec2;
 
 	@:native("fc")
@@ -39,6 +40,7 @@ class Player extends AbstractObject{
 	private var mouthAngle:Float = 0;
 
 	private var beamBox = new AABB(0, 0, 1920, 32);
+	public var beamTimer(default, set):Float = 0;
 	public var doughnuts:Int = 0;
 	private var nutSpr:Sprite;
 	private var nutPos = [5, 55, 10, 66, 14, 76];
@@ -48,8 +50,8 @@ class Player extends AbstractObject{
 		super(screen);
 
 		pos.set(100, 720);
-		hit.set(0, 0, 32, 32);
-		hitOffset.set(-16, -16);
+		hit.set(0, 0, 65, 77);
+		hitOffset.set(-41, -36);
 		bound.set(0, 0, 128, 128);
 		boundOffset.set(-64, -64);
 
@@ -118,11 +120,6 @@ class Player extends AbstractObject{
 		updateBox(hit, hitOffset);
 		updateBox(bound, boundOffset);
 
-		//Main.context.fillStyle = "#555";
-		//Main.context.fillRect(bound.x, bound.y, bound.w, bound.h);
-		//Main.context.fillStyle = "#000";
-		//Main.context.fillRect(hit.x, hit.y, hit.w, hit.h);
-
 		var spd = TAIL_SPEED * s;
 		if(vel.y > 5){
 			tailAngle += spd;
@@ -169,13 +166,14 @@ class Player extends AbstractObject{
 			dy -= 16;
 		}
 
-		var beam = Ctrl.rainbow;
+		var beam = Ctrl.rainbow && beamTimer >= 0;
 		var beamHitX:Float = 1920;
 		var hitEnemy:Enemy = null;
 		if(beam){
 			beamBox.x = pos.x + 76;
 			beamBox.y = pos.y;
 			beamBox.w = 1920 - beamBox.x;
+			beamTimer -= s;
 		}
 		
 		screen.enemies.each(e -> {
@@ -205,7 +203,7 @@ class Player extends AbstractObject{
 			Main.context.fillRect(beamBox.x, beamBox.y, beamBox.w, beamBox.h);
 
 			if(hitEnemy != null){
-				hitEnemy.hurt();
+				hitEnemy.hurt(2);
 			}
 
 			if(mouthAngle < MOUTH_ANGLE_MAX){
@@ -246,5 +244,13 @@ class Player extends AbstractObject{
 		}
 		doughnuts = 0;
 		iTimer = 1.5;
+	}
+
+	function set_beamTimer(value:Float):Float {
+		beamTimer = value;
+		if(beamTimer > BEAM_TIMER_MAX){
+			beamTimer = BEAM_TIMER_MAX;
+		}
+		return beamTimer;
 	}
 }

@@ -15,7 +15,7 @@ class PlayScreen implements IScreen{
 	private static inline var STAR_SPEED_MAX = 50.0;
 	private static inline var STAR_TIME_PREFIL = 1920 / STAR_SPEED_MIN;
 	private static inline var DOUGHNUT_QTY_MAX = 3;
-	private static var DOUGHNUT_CHANCE = [1/*0.2*/, 0.1, 0.05, 0];
+	private static var DOUGHNUT_CHANCE = [0.2, 0.1, 0.05, 0];
 
 	public var player(default, null):Player;
 	public var playerBullets(default, null):ObjArray<PlayerBullet>;
@@ -124,6 +124,12 @@ class PlayScreen implements IScreen{
 		var txt = "SCORE: " + StringTools.lpad(Std.string(score), "0", 6);
 		var txtWidth = Main.context.measureText(txt).width;
 		Main.context.fillText(txt, 1920 - txtWidth - 50, 50);
+
+		Main.context.fillStyle = Resources.rainbowGradient(660, 0, 1260, 0);
+		Main.context.fillRect(660, 1020, 600 * (player.beamTimer / Player.BEAM_TIMER_MAX), 50);
+		Main.context.strokeStyle = "#000";
+		Main.context.lineWidth = 4;
+		Main.context.strokeRect(660, 1020, 600, 50);
 	}
 
 	private function spawnEnemy(){
@@ -132,7 +138,7 @@ class PlayScreen implements IScreen{
 		var e:Enemy = enemies.recycle(() -> new Enemy(this));
 
 		if(r > 0.1){
-			e.init(1920 + 48, 100 + Math.random() * 980, dispMud, actSimple);
+			e.init(1920 + 48, 100 + Math.random() * 900, dispMud, actSimple);
 		}else{
 			e.init(1920 + 128, Math.random() * 16 + 48, dispCloud, actCloud);
 		}
@@ -146,6 +152,7 @@ class PlayScreen implements IScreen{
 		}
 
 		score += e.score;
+		player.beamTimer += 0.2;
 	}
 
 	public function spawnDoughnut(x:Float, y:Float, burst:Bool) {
