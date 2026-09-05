@@ -1,6 +1,7 @@
 package play;
 
 import js.html.ImageElement;
+import js.html.audio.AudioBufferSourceNode;
 import js.lib.Math;
 import math.AABB;
 import math.Vec2;
@@ -45,6 +46,9 @@ class Player extends AbstractObject{
 	private var nutSpr:Sprite;
 	private var nutPos = [5, 55, 10, 66, 14, 76];
 	public var iTimer:Float = 0;
+
+	public var lazerPlaying:Bool = false;
+	public var lazerLoop:AudioBufferSourceNode = null;
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -91,7 +95,7 @@ class Player extends AbstractObject{
 				yy += BULLET_GAP;
 			}
 
-			
+			Sound.shoot();
 			shootCooldown = SHOOT_DELAY;
 		}
 		if(shootCooldown > 0){
@@ -174,6 +178,20 @@ class Player extends AbstractObject{
 			beamBox.y = pos.y;
 			beamBox.w = 1920 - beamBox.x;
 			beamTimer -= s;
+
+			if(!lazerPlaying){
+				lazerPlaying = true;
+				Sound.lazerStart().addEventListener("ended", e -> {
+					lazerLoop = Sound.lazerLoop();
+					lazerLoop.loop = true;
+				});
+			}
+		}else{
+			if(lazerLoop != null){
+				lazerLoop.stop();
+				lazerLoop = null;
+			}
+			lazerPlaying = false;
 		}
 		
 		screen.enemies.each(e -> {
@@ -193,6 +211,7 @@ class Player extends AbstractObject{
 				d.alive = false;
 				doughnuts++;
 				screen.score += d.score;
+				Sound.doughnut();
 			}
 		});
 
@@ -232,6 +251,8 @@ class Player extends AbstractObject{
 		if(iTimer > 0){
 			return;
 		}
+
+		Sound.hit();
 		
 		if(doughnuts == 0){
 			//TODO gameover

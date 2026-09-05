@@ -79,6 +79,9 @@ class Enemy extends AbstractObject{
 
 		if(!alive){
 			this.screen.onEnemyKill(this);	
+			Sound.enemyKill();
+		}else{
+			Sound.enemyHit();
 		}
 	}
 }
