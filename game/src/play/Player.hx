@@ -87,6 +87,10 @@ class Player extends AbstractObject{
 			vel.setLenDir(Ctrl.focus ? FOCUS_SPEED : SPEED, md);
 		}
 
+		if(Ctrl.moveTouchChange.x != 0 || Ctrl.moveTouchChange.y != 0){
+			vel.add(Ctrl.moveTouchChange.mul(1/s).mul(1.5));
+		}
+
 		if(Ctrl.fire && shootCooldown <= 0){
 			var q = doughnuts + 1;
 			var yy = pos.y - (q * BULLET_GAP) / 2;
@@ -126,9 +130,9 @@ class Player extends AbstractObject{
 
 		var spd = TAIL_SPEED * s;
 		if(vel.y > 5){
-			tailAngle += spd;
+			tailAngle += spd * Math.abs(vel.y / 2000.0);
 		}else if(vel.y < -5){
-			tailAngle -= spd;
+			tailAngle -= spd * Math.abs(vel.y / 2000.0);
 		}else if(tailAngle != 0){
 			if(Math.abs(tailAngle) < spd){
 				tailAngle = 0;
@@ -240,6 +244,7 @@ class Player extends AbstractObject{
 		if(iTimer > 0){
 			iTimer -= s;
 		}
+
 	}
 
 	private function getLegAngle(min:Float, max:Float, offset:Float) {

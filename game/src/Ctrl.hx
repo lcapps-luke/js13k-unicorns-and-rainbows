@@ -4,6 +4,7 @@ import js.Browser;
 import js.html.CanvasElement;
 import js.html.Gamepad;
 import js.html.KeyboardEvent;
+import js.html.Touch;
 import js.html.TouchEvent;
 import js.html.Window;
 import math.Vec2;
@@ -33,6 +34,11 @@ class Ctrl {
 
 	@:native("tl")
 	private static var touchList = new Map<Int, Vec2>();
+	private static var moveTouchId:Int = -1;
+	private static var beamTouchId:Int = -1;
+	private static var moveTouchLast:Vec2 = new Vec2(0, 0);
+	public static var moveTouchChange(default, null):Vec2 = new Vec2(0, 0);
+
 	@:native("ut")
 	private static var usingTouchscreen:Bool = false;
 
@@ -87,7 +93,17 @@ class Ctrl {
 		e.stopImmediatePropagation();
 
 		for (t in e.changedTouches) {
-			touchList[t.identifier] = new Vec2(t.clientX, t.clientY);
+			var xx = tpx(t);
+			var yy = tpy(t);
+			touchList[t.identifier] = new Vec2(xx, yy);
+
+			if(moveTouchId == -1){
+				moveTouchId = t.identifier;
+				moveTouchLast.set(xx, yy);
+			}
+			else if(beamTouchId == -1){
+				beamTouchId = t.identifier;
+			}
 		}
 
 		if(!usingTouchscreen){
@@ -101,7 +117,10 @@ class Ctrl {
 		e.stopImmediatePropagation();
 
 		for (t in e.changedTouches) {
-			touchList[t.identifier].set(t.clientX, t.clientY);
+			var xx = tpx(t);
+			var yy = tpy(t);
+
+			touchList[t.identifier].set(xx, yy);
 		}
 	}
 
@@ -112,7 +131,21 @@ class Ctrl {
 
 		for (t in e.changedTouches) {
 			touchList.remove(t.identifier);
+
+			if (t.identifier == moveTouchId) {
+				moveTouchId = -1;
+			} else if (t.identifier == beamTouchId) {
+				beamTouchId = -1;
+			}
 		}
+	}
+
+	private static function tpx(t:Touch):Float {
+		return ((t.clientX - c.offsetLeft) / c.clientWidth) * c.width;
+	}
+
+	private static function tpy(t:Touch):Float {
+		return ((t.clientY - c.offsetTop) / c.clientHeight) * c.height;
 	}
 
 	@:native("upd")
@@ -123,8 +156,17 @@ class Ctrl {
 		down = checkKeys(["ArrowDown", "KeyS"]) || checkButtons([13], [1, 3], f -> f > 0.3);
 		
 		focus = checkKeys(["ShiftLeft", "Semicolon"]) || checkButtons([4, 2, 1], []);
-		fire = checkKeys(["Space", "KeyK", "KeyZ"]) || checkButtons([5, 0], []);
-		rainbow = checkKeys(["KeyJ", "KeyX"]) || checkButtons([7, 6, 3], []);
+		fire = checkKeys(["Space", "KeyK", "KeyZ"]) || checkButtons([5, 0], []) || moveTouchId != -1;
+		rainbow = checkKeys(["KeyJ", "KeyX"]) || checkButtons([7, 6, 3], []) || beamTouchId != -1;
+
+		moveTouchChange.set(0, 0);
+		if (moveTouchId != -1) {
+			var t = touchList[moveTouchId];
+			if (t != null) {
+				moveTouchChange.set(t.x - moveTouchLast.x, t.y - moveTouchLast.y);
+				moveTouchLast.set(t.x, t.y);
+			}
+		}
 	}
 
 	@:native("ck")

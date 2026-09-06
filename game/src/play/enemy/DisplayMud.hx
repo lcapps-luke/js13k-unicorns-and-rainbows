@@ -13,7 +13,7 @@ class DisplayMud implements IDisplay {
 	}
 	public function init(hb:AABB, ho:Vec2, bb:AABB, bo:Vec2) {
 		hb.set(0, 0, 73, 74);
-		ho.set(-30, 35);
+		ho.set(-30, -35);
 
 		bb.set(0, 0, 146, 96);
 		bo.set(-48, -48);
