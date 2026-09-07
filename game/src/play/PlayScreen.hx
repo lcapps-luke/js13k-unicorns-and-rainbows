@@ -3,9 +3,12 @@ package play;
 import menu.MenuScreen;
 import play.enemy.ActionCloud;
 import play.enemy.ActionSimple;
+import play.enemy.ActionStarfish;
 import play.enemy.DisplayCloud;
 import play.enemy.DisplayMud;
+import play.enemy.DisplayStarfish;
 import play.enemy.Enemy;
+import play.enemy.EnemyBullet;
 import resources.Resources;
 
 class PlayScreen implements IScreen{
@@ -20,6 +23,7 @@ class PlayScreen implements IScreen{
 	public var player(default, null):Player;
 	public var playerBullets(default, null):ObjArray<PlayerBullet>;
 	public var enemies(default, null):ObjArray<Enemy>;
+	public var enemyBullets(default, null):ObjArray<EnemyBullet>;
 	public var doughnuts(default, null):ObjArray<Doughnut>;
 
 	private var spawnTimer = 3.0;
@@ -28,6 +32,8 @@ class PlayScreen implements IScreen{
 	private var actCloud = new ActionCloud();
 	private var dispMud = new DisplayMud();
 	private var actSimple = new ActionSimple();
+	private var dispStarfish = new DisplayStarfish();
+	private var actStarfish = new ActionStarfish();
 
 	public var gameover:Bool = false;
 	private var gameoverTimer:Float = 3;
@@ -46,6 +52,7 @@ class PlayScreen implements IScreen{
 		player = new Player(this);
 		playerBullets = new ObjArray<PlayerBullet>();
 		enemies = new ObjArray<Enemy>();
+		enemyBullets = new ObjArray<EnemyBullet>();
 		doughnuts = new ObjArray<Doughnut>();
 
 		var st = 0.0;
@@ -100,6 +107,7 @@ class PlayScreen implements IScreen{
 		}
 		playerBullets.update(s);
 		enemies.update(s);
+		enemyBullets.update(s);
 		doughnuts.update(s);
 
 		spawnTimer -= s;
@@ -137,9 +145,11 @@ class PlayScreen implements IScreen{
 
 		var e:Enemy = enemies.recycle(() -> new Enemy(this));
 
-		if(r > 0.1){
+		if(r > 0.3){
 			e.init(1920 + 48, 100 + Math.random() * 900, dispMud, actSimple);
-		}else{
+		}else if(r > 0.1){
+			e.init(1920 + 128, Math.random() * 1080, dispStarfish, actStarfish);
+		} else{
 			e.init(1920 + 128, Math.random() * 16 + 48, dispCloud, actCloud);
 		}
 	}

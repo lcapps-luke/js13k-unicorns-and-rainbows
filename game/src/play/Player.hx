@@ -210,6 +210,12 @@ class Player extends AbstractObject{
 				}
 			}
 		});
+		screen.enemyBullets.each(e -> {
+			if(e.hit.overlaps(hit)){
+				hurt();
+				e.alive = false;
+			}
+		});
 		screen.doughnuts.each(d -> {
 			if(d.cooldown <= 0 && d.bound.overlaps(bound)){
 				d.alive = false;

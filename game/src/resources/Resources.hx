@@ -17,6 +17,8 @@ class Resources {
 	public static inline var BG_CLOUD_FAR = "f";
 	public static inline var MUD = "m";
 	public static inline var DOUGHNUT = "o";
+	public static inline var STARFISH_BODY = "s";
+	public static inline var STARFISH_BALL = "a";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -39,10 +41,12 @@ class Resources {
 			() -> loadSVG(UNI_TAIL, ResourceBuilder.buildImage("uni-tail.svg")),
 			() -> loadSVG(CLOUD, ResourceBuilder.buildImage("cloud.svg")),
 			() -> loadSVG(LIGHTNING, ResourceBuilder.buildImage("lightning.svg")),
-			() -> loadSVG(BG_CLOUD_NEAR, ResourceBuilder.buildImage("bg_cloud_near.svg")),
-			() -> loadSVG(BG_CLOUD_FAR, ResourceBuilder.buildImage("bg_cloud_far.svg")),
+			() -> loadSVG(BG_CLOUD_NEAR, ResourceBuilder.buildImage("bg-cloud-near.svg")),
+			() -> loadSVG(BG_CLOUD_FAR, ResourceBuilder.buildImage("bg-cloud-far.svg")),
 			() -> loadSVG(MUD, ResourceBuilder.buildImage("mud.svg")),
 			() -> loadSVG(DOUGHNUT, ResourceBuilder.buildImage("doughnut.svg")),
+			() -> loadSVG(STARFISH_BODY, ResourceBuilder.buildImage("starfish-body.svg")),
+			() -> loadSVG(STARFISH_BALL, ResourceBuilder.buildImage("starfish-ball.svg")),
 			() -> loadBg(),
 			() -> loadStars()
 		];
