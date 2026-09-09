@@ -2,9 +2,30 @@
 
 [Made for JS13K 2026](https://js13kgames.com/)
 
+![Cover Image](publish/js12k_cover.png)
+
+Destroy the yucky things!
+
 
 ## Controls
 
+### Keyboard
+**Move:** Arrow Keys  
+**Shoot:** Z  
+**Beam:** X  
+**Slow Move:** Shift
+
+### Touchscreen
+**Move:** Finger  
+**Shoot:** (While moving)  
+**Beam:** Another Finger  
+**Slow Move:** Move finger slower
+
+### Gamepad
+**Move:** Arrows or Sticks 
+**Shoot:** A/X or RB/R1  
+**Beam:** RT/R2  
+**Slow Move:** LT/L2
 
 ## Building
 #### requirements
