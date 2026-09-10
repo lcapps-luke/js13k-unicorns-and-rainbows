@@ -18,7 +18,7 @@ class PlayScreen implements IScreen{
 	private static inline var STAR_SPEED_MAX = 50.0;
 	private static inline var STAR_TIME_PREFIL = 1920 / STAR_SPEED_MIN;
 	private static inline var DOUGHNUT_QTY_MAX = 3;
-	private static var DOUGHNUT_CHANCE = [0.2, 0.1, 0.05, 0];
+	private static var DOUGHNUT_CHANCE = [0.1, 0.05, 0.01, 0];
 
 	public var player(default, null):Player;
 	public var playerBullets(default, null):ObjArray<PlayerBullet>;
@@ -26,7 +26,7 @@ class PlayScreen implements IScreen{
 	public var enemyBullets(default, null):ObjArray<EnemyBullet>;
 	public var doughnuts(default, null):ObjArray<Doughnut>;
 
-	private var spawnTimer = 3.0;
+	private var spawnManager:EnemySpawnManager;
 
 	private var dispCloud = new DisplayCloud();
 	private var actCloud = new ActionCloud();
@@ -71,6 +71,8 @@ class PlayScreen implements IScreen{
 
 			sx -= p.vel.x * t;
 		}
+
+		spawnManager = new EnemySpawnManager(this);
 	}
 	
 	public function update(s:Float) {
@@ -112,11 +114,7 @@ class PlayScreen implements IScreen{
 		enemyBullets.update(s);
 		doughnuts.update(s);
 
-		spawnTimer -= s;
-		if(spawnTimer < 0){
-			spawnTimer = 1.5;
-			spawnEnemy();
-		}
+		spawnManager.update(s);
 
 		if(gameover){
 			gameoverTimer -= s;
@@ -142,20 +140,6 @@ class PlayScreen implements IScreen{
 		Main.context.strokeRect(660, 1020, 600, 50);
 	}
 
-	private function spawnEnemy(){
-		var r = Math.random();
-
-		var e:Enemy = enemies.recycle(() -> new Enemy(this));
-
-		if(r > 0.3){
-			e.init(1920 + 48, 100 + Math.random() * 900, dispMud, actSimple);
-		}else if(r > 0.1){
-			e.init(1920 + 128, Math.random() * 1080, dispStarfish, actStarfish);
-		} else{
-			e.init(1920 + 128, Math.random() * 16 + 48, dispCloud, actCloud);
-		}
-	}
-
 	public function onEnemyKill(e:Enemy){
 		var nutQty = player.doughnuts + doughnuts.alive;
 		var chance = DOUGHNUT_CHANCE[nutQty];
@@ -165,6 +149,7 @@ class PlayScreen implements IScreen{
 
 		score += e.score;
 		player.beamTimer += 0.2;
+		spawnManager.difficulty += 0.05;
 	}
 
 	public function spawnDoughnut(x:Float, y:Float, burst:Bool) {
