@@ -4,7 +4,9 @@ import math.AABB;
 import math.Vec2;
 
 abstract class AbstractObject{
-	public var pos(default, null):Vec2;
+	public var x(default, set):Float = 0;
+	public var y(default, set):Float = 0;
+	
 	public var vel(default, null):Vec2;
 	
 	public var hit(default, null):AABB;
@@ -17,7 +19,6 @@ abstract class AbstractObject{
 
 	public function new(screen:PlayScreen){
 		this.screen = screen;
-		pos = new Vec2(0);
 		vel = new Vec2();
 
 		hit = new AABB();
@@ -32,14 +33,26 @@ abstract class AbstractObject{
 	}
 
 	public function update(s:Float){
-		pos.add(vel.clone().mul(s));
-
-		updateBox(hit, hitOffset);
-		updateBox(bound, boundOffset);
+		x += vel.x * s;
+		y += vel.y * s;
 	}
 
 	private function updateBox(box:AABB, off:Vec2){
-		box.x = pos.x + off.x;
-		box.y = pos.y + off.y;
+		box.x = x + off.x;
+		box.y = y + off.y;
+	}
+
+	function set_x(value:Float):Float {
+		x = value;
+		updateBox(hit, hitOffset);
+		updateBox(bound, boundOffset);
+		return value;
+	}
+
+	function set_y(value:Float):Float {
+		y = value;
+		updateBox(hit, hitOffset);
+		updateBox(bound, boundOffset);
+		return value;
 	}
 }

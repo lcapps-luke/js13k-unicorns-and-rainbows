@@ -1,10 +1,12 @@
 package play.enemy;
 
 class ActionCloud implements IAction{
+	public static inline var SPEED:Float = 128;
+
 	public function new(){}
 
 	public function init(e:Enemy) {
-		e.vel.set(-128, 0);
+		e.vel.set(-SPEED, 0);
 		e.health = 10;
 		e.score = 13;
 		e.phase = 0;

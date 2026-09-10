@@ -23,7 +23,8 @@ class Enemy extends AbstractObject{
 		this.display = display;
 		this.action = action;
 
-		pos.set(x, y);
+		this.x = x;
+		this.y = y;
 
 		display.init(hit, hitOffset, bound, boundOffset);
 		action.init(this);
@@ -46,7 +47,7 @@ class Enemy extends AbstractObject{
 
 		super.update(s);
 
-		display.draw(pos, Main.context, this);
+		display.draw(x, y, Main.context, this);
 
 		screen.playerBullets.each(b -> {
 			if(b.hit.overlaps(bound)){

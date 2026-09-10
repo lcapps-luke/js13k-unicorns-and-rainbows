@@ -1,13 +1,15 @@
 package play.enemy;
 
 class ActionStarfish implements IAction {
+	public static inline var SPEED:Float = 200;
+	
 	public function new(){}
 
 	public function init(e:Enemy) {
-		e.vel.set(-200, 0);
+		e.vel.set(-SPEED, 0);
 		e.health = 5;
 		e.score = 8;
-		e.timer = (500 / 200) + Math.random() * (900 / 200); // Between 500 and 900 pixels
+		e.timer = (500 / SPEED) + Math.random() * (900 / SPEED); // Between 500 and 900 pixels
 		e.phase = 0;
 	}
 
@@ -23,7 +25,7 @@ class ActionStarfish implements IAction {
 				var yy = Math.sin(a) * 55;
 
 				var b:EnemyBullet = p.enemyBullets.recycle(() -> new EnemyBullet(p));
-				b.init(e.pos.x + xx, e.pos.y + yy, 500, a);
+				b.init(e.x + xx, e.y + yy, 500, a);
 			}
 
 			e.phase = 1;

@@ -27,7 +27,7 @@ class Particle extends AbstractObject {
 
 		var f = Main.context.filter;
 		Main.context.filter = filter;
-		Main.context.drawImage(img, pos.x, pos.y);
+		Main.context.drawImage(img, x, y);
 		Main.context.filter = f;
 	}
 }

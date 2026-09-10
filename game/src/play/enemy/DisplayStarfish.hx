@@ -15,7 +15,7 @@ class DisplayStarfish implements IDisplay {
 		bb.set(0, 0, 128, 128);
 		bo.set(-64, -64);
 	}
-	public function draw(p:math.Vec2, c:js.html.CanvasRenderingContext2D, e:Enemy) {
+	public function draw(x:Float, y:Float, c:js.html.CanvasRenderingContext2D, e:Enemy) {
 		if(e.phase == 0){
 			var incr = (Math.PI * 2) / 5;
 			for(i in 0...5){
@@ -23,10 +23,10 @@ class DisplayStarfish implements IDisplay {
 				var xx = Math.cos(a) * 55;
 				var yy = Math.sin(a) * 55;
 
-				Main.context.drawImage(ball, p.x + xx - 15, p.y + yy - 15);
+				Main.context.drawImage(ball, x + xx - 15, y + yy - 15);
 			}
 		}
 
-		Main.context.drawImage(bod, p.x-55, p.y-55);
+		Main.context.drawImage(bod, x-55, y-55);
 	}
 }

@@ -31,15 +31,15 @@ class Doughnut extends AbstractObject{
 		
 		super.update(s);
 
-		if(pos.y < 0 && vel.y < 0){
+		if(y < 0 && vel.y < 0){
 			vel.y = -vel.y;
-			pos.y = 0;
+			y = 0;
 		}
-		if(pos.y > 1080 && vel.y > 0){
+		if(y > 1080 && vel.y > 0){
 			vel.y = -vel.y;
-			pos.y = 1080;
+			y = 1080;
 		}
-		if(pos.x < 0){
+		if(x < 0){
 			alive = false;
 		}
 
@@ -52,7 +52,8 @@ class Doughnut extends AbstractObject{
 
 	public function init(x:Float, y:Float) {
 		reset();
-		pos.set(x, y);
+		this.x = x;
+		this.y = y;
 		vel.set(-100, 0);
 		acc = 0;
 		cooldown = 0;

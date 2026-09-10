@@ -15,7 +15,8 @@ class EnemyBullet extends AbstractObject{
 	public function init(x:Float, y:Float, speed:Float, direction:Float){
 		reset();
 
-		pos.set(x, y);
+		this.x = x;
+		this.y = y;
 		vel.setLenDir(speed, direction);
 	}
 

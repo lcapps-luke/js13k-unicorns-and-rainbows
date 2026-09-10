@@ -22,7 +22,7 @@ class DisplayCloud implements IDisplay{
 		bo.set(-128, -48);
 	}
 
-	public function draw(p:Vec2, c:CanvasRenderingContext2D, e:Enemy) {
+	public function draw(x:Float, y:Float, c:CanvasRenderingContext2D, e:Enemy) {
 		if(e.attack > 0){
 			Main.context.drawImage(l, e.hit.x - 22, e.hit.y);
 		}

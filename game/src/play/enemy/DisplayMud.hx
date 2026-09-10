@@ -19,7 +19,7 @@ class DisplayMud implements IDisplay {
 		bo.set(-48, -48);
 	}
 
-	public function draw(p:Vec2, c:CanvasRenderingContext2D, e:Enemy) {
+	public function draw(x:Float, y:Float, c:CanvasRenderingContext2D, e:Enemy) {
 		Main.context.drawImage(i, e.bound.x, e.bound.y);
 	}
 }

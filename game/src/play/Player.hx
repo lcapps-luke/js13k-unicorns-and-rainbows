@@ -53,7 +53,8 @@ class Player extends AbstractObject{
 	public function new(screen:PlayScreen){
 		super(screen);
 
-		pos.set(100, 720);
+		x = 100;
+		y = 720;
 		hit.set(0, 0, 65, 77);
 		hitOffset.set(-41, -36);
 		bound.set(0, 0, 128, 128);
@@ -93,9 +94,9 @@ class Player extends AbstractObject{
 
 		if(Ctrl.fire && shootCooldown <= 0){
 			var q = doughnuts + 1;
-			var yy = pos.y - (q * BULLET_GAP) / 2;
+			var yy = y - (q * BULLET_GAP) / 2;
 			for(i in 0...q){
-				screen.playerBullets.recycle(() -> new PlayerBullet(screen)).init(pos.x, yy);
+				screen.playerBullets.recycle(() -> new PlayerBullet(screen)).init(x, yy);
 				yy += BULLET_GAP;
 			}
 
@@ -108,20 +109,20 @@ class Player extends AbstractObject{
 
 		super.update(s);
 
-		if(pos.x < 64){
-			pos.x = 64;
+		if(x < 64){
+			x = 64;
 			vel.x = 0;
 		}
-		if(pos.x > Main.canvas.width - 64){
-			pos.x = Main.canvas.width - 64;
+		if(x > Main.canvas.width - 64){
+			x = Main.canvas.width - 64;
 			vel.x = 0;
 		}
-		if(pos.y < 64){
-			pos.y = 64;
+		if(y < 64){
+			y = 64;
 			vel.y = 0;
 		}
-		if(pos.y > Main.canvas.height - 64){
-			pos.y = Main.canvas.height - 64;
+		if(y > Main.canvas.height - 64){
+			y = Main.canvas.height - 64;
 			vel.y = 0;
 		}
 
@@ -150,24 +151,24 @@ class Player extends AbstractObject{
 		legTimer += Math.PI * s;
 		// behind
 		Main.context.filter = "brightness(90%)"; 
-		spLeg.draw(Main.context, pos.x-8, pos.y+94, getLegAngle(-Math.PI * .1, Math.PI * .1, 1));
-		spLeg.draw(Main.context, pos.x-102, pos.y+94, getLegAngle(Math.PI * .3, Math.PI * .4, 1));
+		spLeg.draw(Main.context, x-8, y+94, getLegAngle(-Math.PI * .1, Math.PI * .1, 1));
+		spLeg.draw(Main.context, x-102, y+94, getLegAngle(Math.PI * .3, Math.PI * .4, 1));
 		Main.context.filter = "brightness(100%)"; 
 
-		spTail.draw(Main.context, pos.x-104, pos.y+51, tailAngle);
+		spTail.draw(Main.context, x-104, y+51, tailAngle);
 
 		// main
-		Main.context.drawImage(spBody, pos.x-115, pos.y-110);
-		spMouthU.draw(Main.context, pos.x + 37, pos.y+7, -mouthAngle);
-		spMouthL.draw(Main.context, pos.x+19, pos.y+35, mouthAngle * .3);
+		Main.context.drawImage(spBody, x-115, y-110);
+		spMouthU.draw(Main.context, x + 37, y+7, -mouthAngle);
+		spMouthL.draw(Main.context, x+19, y+35, mouthAngle * .3);
 
 		// front
-		spLeg.draw(Main.context, pos.x-9, pos.y+94, getLegAngle(-Math.PI * .1, Math.PI * .1, 0));
-		spLeg.draw(Main.context, pos.x-102, pos.y+94, getLegAngle(Math.PI * .3, Math.PI * .4, 0));
+		spLeg.draw(Main.context, x-9, y+94, getLegAngle(-Math.PI * .1, Math.PI * .1, 0));
+		spLeg.draw(Main.context, x-102, y+94, getLegAngle(Math.PI * .3, Math.PI * .4, 0));
 
 		// doughnuts
-		var dx = pos.x + 5;
-		var dy = pos.y - 55;
+		var dx = x + 5;
+		var dy = y - 55;
 		for(i in 0...doughnuts){
 			nutSpr.draw(Main.context, dx, dy, DOUGHNUT_ANGLE);
 			dx += 8;
@@ -178,8 +179,8 @@ class Player extends AbstractObject{
 		var beamHitX:Float = 1920;
 		var hitEnemy:Enemy = null;
 		if(beam){
-			beamBox.x = pos.x + 76;
-			beamBox.y = pos.y;
+			beamBox.x = x + 76;
+			beamBox.y = y;
 			beamBox.w = 1920 - beamBox.x;
 			beamTimer -= s;
 
@@ -272,7 +273,7 @@ class Player extends AbstractObject{
 		}
 
 		for(i in 0... doughnuts){
-			screen.spawnDoughnut(pos.x, pos.y, true);
+			screen.spawnDoughnut(x, y, true);
 		}
 		doughnuts = 0;
 		iTimer = 1.5;

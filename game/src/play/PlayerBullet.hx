@@ -15,7 +15,8 @@ class PlayerBullet extends AbstractObject{
 
 	public function init(x:Float, y:Float){
 		reset();
-		pos.set(x, y);
+		this.x = x;
+		this.y = y;
 	}
 
 	override function update(s:Float) {
@@ -24,7 +25,7 @@ class PlayerBullet extends AbstractObject{
 		Main.context.fillStyle = "#FFF";
 		Main.context.fillRect(bound.x, bound.y, bound.w, bound.h);
 
-		if(pos.x > Main.canvas.width + 16){
+		if(x > Main.canvas.width + 16){
 			alive = false;
 		}
 	}

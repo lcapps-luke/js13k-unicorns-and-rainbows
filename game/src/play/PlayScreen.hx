@@ -62,8 +62,9 @@ class PlayScreen implements IScreen{
 			st += t;
 			var p = bgParticles.recycle(() -> new Particle(this));
 			p.init(Resources.images.get("BGS"), 20, 20);
-			p.pos.set(sx, Math.random() * 1080);
-			
+			p.x = sx;
+			p.y = Math.random() * 1080;
+
 			var f = Math.random() > 0.5;
 			p.vel.set(f ? -STAR_SPEED_MIN : -STAR_SPEED_MAX, 0);
 			p.filter = f ? "brightness(50%)" : "brightness(70%)";
@@ -80,8 +81,9 @@ class PlayScreen implements IScreen{
 			bgSTimer = STAR_TIMER_MIN + Math.random() * STAR_TIMER_MAX;
 			var p = bgParticles.recycle(() -> new Particle(this));
 			p.init(Resources.images.get("BGS"), 20, 20);
-			p.pos.set(1919, Math.random() * 1080);
-			
+			p.x = 1919;
+			p.y = Math.random() * 1080;
+
 			var f = Math.random() > 0.5;
 			p.vel.set(f ? -STAR_SPEED_MIN : -STAR_SPEED_MAX, 0);
 			p.filter = f ? "brightness(50%)" : "brightness(70%)";
