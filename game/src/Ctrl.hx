@@ -78,11 +78,15 @@ class Ctrl {
 
 	@:native("okd")
 	private static function onKeyDown(e:KeyboardEvent) {
+		e.preventDefault();
+		e.stopImmediatePropagation();
 		keys.set(e.code, true);
 	}
 
 	@:native("oku")
 	private static function onKeyUp(e:KeyboardEvent) {
+		e.preventDefault();
+		e.stopImmediatePropagation();
 		keys.set(e.code, false);
 	}
 
