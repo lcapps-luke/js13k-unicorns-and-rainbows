@@ -1,6 +1,10 @@
 package play;
 
+import js.html.ImageElement;
+import resources.Resources;
+
 class PlayerBullet extends AbstractObject{
+	private var spr:ImageElement = Resources.images.get(Resources.PLAYER_BULLET);
 
 	public function new(screen:PlayScreen){
 		super(screen);
@@ -22,8 +26,7 @@ class PlayerBullet extends AbstractObject{
 	override function update(s:Float) {
 		super.update(s);
 
-		Main.context.fillStyle = "#FFF";
-		Main.context.fillRect(bound.x, bound.y, bound.w, bound.h);
+		Main.context.drawImage(spr, bound.x, bound.y);
 
 		if(x > Main.canvas.width + 16){
 			alive = false;

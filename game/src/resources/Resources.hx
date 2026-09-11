@@ -13,12 +13,15 @@ class Resources {
 	public static inline var UNI_TAIL = "t";
 	public static inline var CLOUD = "c";
 	public static inline var LIGHTNING = "i";
+	public static inline var BG_SKY = "k";
+	public static inline var BG_STAR = "r";
 	public static inline var BG_CLOUD_NEAR = "n";
 	public static inline var BG_CLOUD_FAR = "f";
 	public static inline var MUD = "m";
 	public static inline var DOUGHNUT = "o";
 	public static inline var STARFISH_BODY = "s";
 	public static inline var STARFISH_BALL = "a";
+	public static inline var PLAYER_BULLET = "p";
 
 	@:native("rq")
 	public static var resourceQty:Int = 0;
@@ -48,7 +51,8 @@ class Resources {
 			() -> loadSVG(STARFISH_BODY, ResourceBuilder.buildImage("starfish-body.svg")),
 			() -> loadSVG(STARFISH_BALL, ResourceBuilder.buildImage("starfish-ball.svg")),
 			() -> loadBg(),
-			() -> loadStars()
+			() -> loadStars(),
+			() -> loadPlayerBullet()
 		];
 
 		resourceQty = loaders.length;
@@ -108,7 +112,7 @@ class Resources {
 			con.fillStyle = gradient;
 			con.fillRect(0, 0, 1920, 1080);
 
-			loadImage("BG", c.toDataURL()).then(resolve, reject);
+			loadImage(Resources.BG_SKY, c.toDataURL()).then(resolve, reject);
 		});
 	}
 
@@ -129,7 +133,24 @@ class Resources {
 			con.lineTo(10, 20);
 			con.stroke();
 
-			loadImage("BGS", c.toDataURL()).then(resolve, reject);
+			loadImage(Resources.BG_STAR, c.toDataURL()).then(resolve, reject);
+		});
+	}
+
+	private static function loadPlayerBullet(){
+		return new Promise((resolve, reject) -> {
+			var c = createCanvas(32, 32);
+			var con = c.getContext2d();
+			con.strokeStyle = "#fff";
+			con.lineWidth = 8;
+			
+			con.beginPath();
+			con.moveTo(0, 0);
+			con.lineTo(32, 16);
+			con.lineTo(0, 32);
+			con.stroke();
+
+			loadImage(Resources.PLAYER_BULLET, c.toDataURL()).then(resolve, reject);
 		});
 	}
 

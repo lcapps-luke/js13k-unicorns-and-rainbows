@@ -39,7 +39,7 @@ class PlayScreen implements IScreen{
 	public var gameover:Bool = false;
 	private var gameoverTimer:Float = 3;
 
-	private var bg = Resources.images.get("BG");
+	private var bg = Resources.images.get(Resources.BG_SKY);
 	private var bgCn = Resources.images.get(Resources.BG_CLOUD_NEAR);
 	private var bgCnx = 0.0;
 	private var bgCf = Resources.images.get(Resources.BG_CLOUD_FAR);
@@ -62,7 +62,7 @@ class PlayScreen implements IScreen{
 			var t = STAR_TIMER_MIN + Math.random() * STAR_TIMER_MAX;
 			st += t;
 			var p = bgParticles.recycle(() -> new Particle(this));
-			p.init(Resources.images.get("BGS"), 20, 20);
+			p.init(Resources.images.get(Resources.BG_STAR), 20, 20);
 			p.x = sx;
 			p.y = Math.random() * 1080;
 
@@ -83,7 +83,7 @@ class PlayScreen implements IScreen{
 		if(bgSTimer < 0){
 			bgSTimer = STAR_TIMER_MIN + Math.random() * STAR_TIMER_MAX;
 			var p = bgParticles.recycle(() -> new Particle(this));
-			p.init(Resources.images.get("BGS"), 20, 20);
+			p.init(Resources.images.get(Resources.BG_STAR), 20, 20);
 			p.x = 1919;
 			p.y = Math.random() * 1080;
 
@@ -154,8 +154,8 @@ class PlayScreen implements IScreen{
 		}
 
 		score += e.score;
-		player.beamTimer += 0.2;
-		spawnManager.difficulty += 0.05;
+		player.beamTimer += 0.1;
+		spawnManager.difficulty += 0.5;
 	}
 
 	public function spawnDoughnut(x:Float, y:Float, burst:Bool) {
