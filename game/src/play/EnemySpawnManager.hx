@@ -10,7 +10,7 @@ import play.enemy.Enemy;
 
 class EnemySpawnManager{
 	private var nextWaveTimer:Float = 0;
-	public var difficulty:Float = 1;
+	public var difficulty:Float = 1.1;
 	private var screen:PlayScreen;
 
 	private var dispCloud = new DisplayCloud();
@@ -29,9 +29,9 @@ class EnemySpawnManager{
 	public function new(screen:PlayScreen){
 		this.screen = screen;
 
-		mudDefinition = {init: initMud, difficulty: 0.5, cooldown: 0.0, timeToHalfScreen: 960 / ActionSimple.SPEED};
-		cloudDefinition = {init: initCloud, difficulty: 2.0, cooldown: 0.0, timeToHalfScreen: 960 / ActionCloud.SPEED};
-		starfishDefinition = {init: initStarfish, difficulty: 1.5, cooldown: 0.0, timeToHalfScreen: 960 / ActionStarfish.SPEED};
+		mudDefinition = {init: initMud, difficulty: 1.0, cooldown: 0.0, timeToHalfScreen: 960 / ActionSimple.SPEED};
+		cloudDefinition = {init: initCloud, difficulty: 6.0, cooldown: 0.0, timeToHalfScreen: 960 / ActionCloud.SPEED};
+		starfishDefinition = {init: initStarfish, difficulty: 8.0, cooldown: 0.0, timeToHalfScreen: 960 / ActionStarfish.SPEED};
 
 		enemyDefinitions = [
 			mudDefinition,
@@ -77,7 +77,8 @@ class EnemySpawnManager{
 			
 			// 5. check if new enemy overlaps with any existing enemies
 			var overlap = findOverlap(e, spawned);
-			while(overlap != null){
+			var limit = 10; // Limit the number of attempts to resolve overlap
+			while(overlap != null && limit > 0){
 				// If it overlaps, push it back to the right side of the screen and continue
 
 				// calculate bound overlap
@@ -87,6 +88,8 @@ class EnemySpawnManager{
 				trace('New enemy position: ' + e.x + ', Overlapping enemy position: ' + overlap.x);
 
 				overlap = findOverlap(e, spawned);
+
+				limit--;
 			}
 			spawned.push(e);
 
