@@ -29,6 +29,7 @@ class ActionStarfish implements IAction {
 			}
 
 			e.phase = 1;
+			Sound.starfishShoot();
 		}
 	}
 }

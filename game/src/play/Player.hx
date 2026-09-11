@@ -192,11 +192,7 @@ class Player extends AbstractObject{
 				});
 			}
 		}else{
-			if(lazerLoop != null){
-				lazerLoop.stop();
-				lazerLoop = null;
-			}
-			lazerPlaying = false;
+			stopLazerSound();
 		}
 		
 		screen.enemies.each(e -> {
@@ -267,9 +263,10 @@ class Player extends AbstractObject{
 		Sound.hit();
 		
 		if(doughnuts == 0){
-			//TODO gameover
 			screen.gameover = true;
 			alive = false;
+
+			stopLazerSound();
 		}
 
 		for(i in 0... doughnuts){
@@ -285,5 +282,13 @@ class Player extends AbstractObject{
 			beamTimer = BEAM_TIMER_MAX;
 		}
 		return beamTimer;
+	}
+
+	public function stopLazerSound() {
+		if(lazerLoop != null){
+			lazerLoop.stop();
+			lazerLoop = null;
+		}
+		lazerPlaying = false;
 	}
 }

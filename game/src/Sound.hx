@@ -45,4 +45,9 @@ class Sound {
 	public static function lazerLoop() {
 		return ZzFX.zzfx(1,0,335,0,1,0,0,3.7,0,0,0,0,0,.3,41,0,0,1,0,0,0);
 	}
+
+	@:native("j")
+	public static function starfishShoot() {
+		ZzFX.zzfx(.7,.05,211,.01,.02,.05,0,3.2,-12,-4,0,0,0,.6,0,.2,0,.95,.1,0,-1496);
+	}
 }

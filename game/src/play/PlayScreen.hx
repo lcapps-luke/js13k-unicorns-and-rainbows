@@ -109,6 +109,8 @@ class PlayScreen implements IScreen{
 
 		if(player.alive){
 			player.update(s);
+		}else{
+			player.stopLazerSound();
 		}
 		playerBullets.update(s);
 		enemies.update(s);
