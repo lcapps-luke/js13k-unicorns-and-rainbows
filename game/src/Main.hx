@@ -8,6 +8,8 @@ import menu.MenuScreen;
 
 @:native("M")
 class Main{
+	public static inline var SCORE_DATA_KEY = "lcann.2026.score";
+
 	@:native("ca")
 	public static var canvas(default, null):CanvasElement;
 

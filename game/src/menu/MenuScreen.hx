@@ -12,6 +12,8 @@ class MenuScreen implements IScreen{
 	private var delay:Float = 0.5;
 	private var playHeld:Bool = false;
 
+	private var topScore:Int = 0;
+
 	public function new(){
 		if(!loaded){
 			Resources.load().then(i -> {
@@ -21,26 +23,36 @@ class MenuScreen implements IScreen{
 			});
 		}
 
-		gradient = Resources.rainbowGradient(Main.canvas.width * 0.3, 0, Main.canvas.width * 0.7, 0);
+		gradient = Resources.rainbowGradient(Main.canvas.width * 0.1, 0, Main.canvas.width * 0.9, 0);
+
+		topScore = Std.parseInt(Browser.window.localStorage.getItem(Main.SCORE_DATA_KEY) ?? "0");
 	}
 
 	public function update(s:Float) {
 		if(loaded){
-			Main.context.drawImage(Resources.images.get("BG"), 0, 0);
+			Main.context.drawImage(Resources.images.get(Resources.BG_SKY), 0, 0);
 		}
 
 		Main.context.fillStyle = gradient;
 		var t = Browser.document.title;
-		Main.context.font = "80px cursive";
+		Main.context.font = "160px cursive";
 		var m = Main.context.measureText(t);
-		Main.context.fillText(t, Main.canvas.width / 2 - m.width / 2, Main.canvas.height * 0.25);
+		Main.context.fillText(t, Main.canvas.width / 2 - m.width / 2, Main.canvas.height * 0.20);
+
+		if(topScore > 0){
+			Main.context.fillStyle = "#fff";
+			t = "Best Score: " + StringTools.lpad(Std.string(topScore), "0", 6);
+			Main.context.font = "50px cursive";
+			m = Main.context.measureText(t);
+			Main.context.fillText(t, Main.canvas.width / 2 - m.width / 2, Main.canvas.height * 0.35);
+		}
 
 		if(delay > 0){
 			delay -= s;
 		}else if(loaded){
 			Main.context.fillStyle = "#fff";
 			var t = "Press [fire] to start";
-			Main.context.font = "60px cursive";
+			Main.context.font = "100px cursive";
 			var m = Main.context.measureText(t);
 			Main.context.fillText(t, Main.canvas.width / 2 - m.width / 2, Main.canvas.height * 0.6);
 

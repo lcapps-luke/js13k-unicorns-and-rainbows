@@ -1,5 +1,6 @@
 package play;
 
+import js.Browser;
 import menu.MenuScreen;
 import play.enemy.ActionCloud;
 import play.enemy.ActionSimple;
@@ -119,6 +120,11 @@ class PlayScreen implements IScreen{
 		if(gameover){
 			gameoverTimer -= s;
 			if(gameoverTimer < 0){
+
+				var currentTopScore = Std.parseInt(Browser.window.localStorage.getItem(Main.SCORE_DATA_KEY) ?? "0");
+				if(score > currentTopScore){
+					Browser.window.localStorage.setItem(Main.SCORE_DATA_KEY, Std.string(score));
+				}
 				Main.screen = new MenuScreen();
 			}
 		}
